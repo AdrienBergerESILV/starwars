@@ -1,0 +1,152 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Star Wars</title>
+    <style type="text/css">
+        div {
+            display: inline-block;
+            padding: 10px;
+            margin: 10px;
+            font-size: 1.3em
+        }
+        .caract
+        {
+            border-radius: 150px;
+            box-shadow: 5px 5px 8px black;
+        }
+
+        .but
+        { 
+            background: none;
+            border-left: none;
+            border:none;
+            border-radius:150px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/javascript" src="./react/react.js"></script>
+    <script type="text/javascript" src="./react/JSXTransformer.js"></script>
+    <script type="text/javascript" src="./index.js"></script>
+    <script type="text/javascript">
+
+        var IndexYoda = [0,5,7,9];
+        var IndexVador = [3,10];
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min +1)) + min;
+        }
+
+        function getRandomPerso()
+        {
+            return quotes[getRandomIntInclusive(0,10)];
+        }
+
+        console.log(getRandomPerso());
+
+        var scoreOf = {};
+        var scoreIs = function(point) {
+            return function (letter) {
+                    scoreOf[letter] = point;
+            };
+        };
+
+        var letters = ["Aleatoire",quotes[0].author,quotes[1].author,quotes[2].author,quotes[3].author,quotes[4].author,quotes[6].author,quotes[8].author];
+        ["ALEA"].forEach(scoreIs(quotes[[getRandomIntInclusive(0, 10)]].quote));
+        [quotes[0].author].forEach(scoreIs(quotes[IndexYoda[getRandomIntInclusive(0, 3)]].quote));
+        [quotes[1].author].forEach(scoreIs(quotes[1].quote));
+        [quotes[2].author].forEach(scoreIs(quotes[2].quote));
+        [quotes[3].author].forEach(scoreIs(quotes[IndexVador[getRandomIntInclusive(0, 1)]].quote));
+        [quotes[4].author].forEach(scoreIs(quotes[4].quote));
+        [quotes[6].author].forEach(scoreIs(quotes[5].quote));
+        [quotes[8].author].forEach(scoreIs(quotes[8].quote))
+
+    </script>
+    
+    <script type="text/jsx">
+
+    var Tree =  React.createClass({
+        render : function () {
+            return (<div>
+                <Letters onLetterSelected={this.selectLetter}/>
+                <Score letter={this.state.letter}/>
+            </div>);
+        },
+
+        getInitialState : function() {
+            return{
+                letter : ''
+            }
+        },
+
+        selectLetter : function (newLetter) {
+            return this.setState({letter : newLetter});
+        }
+    });
+
+    var Letters = React.createClass({
+
+        render : function () {
+            var handler = this.props.onLetterSelected;
+
+            return (<div>
+                {letters.map(function(item) {
+                    return <Letter itemValue={item} whenClick={handler} />;
+                })}
+            </div>);
+        },
+
+    });
+
+    var Letter = React.createClass({
+
+        render : function () {
+            var classname = this.state.selected ? 'selected' : '';
+            return (
+            <div>
+            <div className={classname} onClick={this.handleClick}>{this.props.itemValue}</div>
+            </div>);
+        },
+
+        getInitialState : function () {
+            return {selected : false };
+        },
+
+        handleClick : function () {
+
+            this.props.whenClick(this.props.itemValue);
+            [quotes[0].author].forEach(scoreIs(quotes[IndexYoda[getRandomIntInclusive(0, 3)]].quote));
+            [quotes[3].author].forEach(scoreIs(quotes[IndexVador[getRandomIntInclusive(0, 1)]].quote));
+            ["ALEA"].forEach(scoreIs(quotes[[getRandomIntInclusive(0, 10)]].quote));
+        }
+    });
+              
+
+    var Score = React.createClass({
+
+        render : function () {
+        if(this.props.letter != "Aleatoire")
+            return (<div>
+                    {this.props.letter} : {scoreOf[this.props.letter]}
+            </div>);
+        else
+        var perso = getRandomPerso();
+            return(<div>
+                    {perso.author} : {perso.quote}
+            </div>)
+        },
+
+    });
+
+
+    React.render(<Tree />, document.getElementById('root'));
+
+    </script>
+</body>
+</html>
